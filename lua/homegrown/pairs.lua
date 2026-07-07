@@ -1,39 +1,10 @@
 local M = {}
 
-local self_closing_tags = {
-    area = true,
-    base = true,
-    br = true,
-    col = true,
-    embed = true,
-    hr = true,
-    img = true,
-    input = true,
-    keygen = true,
-    link = true,
-    meta = true,
-    param = true,
-    source = true,
-    track = true,
-    wbr = true,
-}
-
-local tag_filetypes = {
-    astro = true,
-    heex = true,
-    html = true,
-    javascriptreact = true,
-    jinja = true,
-    markdown = true,
-    php = true,
-    svelte = true,
-    typescriptreact = true,
-    vue = true,
-    xhtml = true,
-    xml = true,
-}
-
 local function close_tag()
+    local config = require('homegrown.config')
+    local tag_filetypes = config.options.pairs.tag_filetypes
+    local self_closing_tags = config.options.pairs.self_closing_tags
+
     if not tag_filetypes[vim.bo.filetype] then
         return '>'
     end
@@ -86,9 +57,7 @@ local function backspace_pair()
     return '<BS>'
 end
 
-function M.setup(opts)
-    opts = opts or {}
-
+function M.setup()
     -- Autoclose HTML tag
     vim.keymap.set('i', '>', close_tag, { expr = true, silent = true, desc = 'Autoclose HTML tag' })
 

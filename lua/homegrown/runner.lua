@@ -13,20 +13,9 @@ local function run_internal(name, execute_fn)
 end
 
 function M.run(line1, line2)
+    local config = require('homegrown.config')
     local ft = vim.bo.filetype
-    -- Define interpreters for each supported filetype
-    local interpreters = {
-        python = 'python3',
-        ruby = 'ruby',
-        lua = 'lua',
-        javascript = 'node',
-        typescript = 'ts-node',
-        sh = 'bash',
-        bash = 'bash',
-        go = 'go run',
-        elixir = 'elixir',
-        java = 'java',
-    }
+    local interpreters = config.options.runner.interpreters
 
     -- Extract visual selection or entire file buffer content
     local lines = vim.api.nvim_buf_get_lines(0, line1 - 1, line2, false)
