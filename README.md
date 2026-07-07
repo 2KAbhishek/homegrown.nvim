@@ -138,8 +138,8 @@ require("homegrown.runner").setup()
 ### 8. Terminal wrappers (`terminal`)
 
 - `:Fterm` : Floating terminal
-- `:Sterm` / `:STerm` : Split terminal (bottom/top)
-- `:Vterm` / `:VTerm` : Vertical split terminal (right/left)
+- `:Sterm` : Split terminal (bottom)
+- `:Vterm` : Vertical split terminal (right)
 - `:Tterm` : Terminal in current buffer
 
 ### 9. Tmux Split Navigation (`tmux`)

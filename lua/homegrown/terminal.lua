@@ -34,16 +34,8 @@ function M.setup()
         M.open(input.args, 'bottom')
     end, { nargs = '*' })
 
-    vim.api.nvim_create_user_command('STerm', function(input)
-        M.open(input.args, 'top')
-    end, { nargs = '*' })
-
     vim.api.nvim_create_user_command('Vterm', function(input)
         M.open(input.args, 'right')
-    end, { nargs = '*' })
-
-    vim.api.nvim_create_user_command('VTerm', function(input)
-        M.open(input.args, 'left')
     end, { nargs = '*' })
 
     vim.api.nvim_create_user_command('Tterm', function(input)
