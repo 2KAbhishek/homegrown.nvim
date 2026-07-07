@@ -77,6 +77,18 @@ Install homegrown.nvim using your preferred package manager (e.g. [lazy.nvim](ht
             enabled = true,
             split_ratio = 1.8,   -- Override default split ratio of 2.0
         },
+        runner = {
+            enabled = true,
+            interpreters = {
+                rust = "cargo run", -- Add support for Rust code execution
+            }
+        },
+        pairs = {
+            enabled = true,
+            tag_filetypes = {
+                xml = true, -- Enable tag-closing in XML files
+            }
+        }
     }
 }
 ```
