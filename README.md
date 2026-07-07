@@ -44,6 +44,9 @@ homegrown.nvim is a collection of modular Neovim plugins and utility commands ex
 - **Terminal Layouts (`terminal`)**: Shortcuts to toggle split, floating, and tabbed terminal buffers powered by `snacks.nvim`. _(Replaces [termim](https://github.com/2kabhishek/termim))_
 - **Vim/Tmux split integration (`tmux`)**: Seamless navigation across split editor panes and Tmux windows. _(Replaces [navigator.nvim](https://github.com/numToStr/Navigator.nvim))_
 - **Navigation, Ranger, and Git commands (`dir`)**: Project RootDir directory swapper, Ranger Picker floating window, and shell-based background Git helper. _(Lightweight replacement for heavy file managers/trees)_
+- **Dynamic Autotiling (`tiling`)**: Dynamically split windows horizontally or vertically depending on the focused window aspect ratio when opening a file. _(Lightweight replacement for complex layout managers)_
+
+
 
 ## ⚡ Setup
 
@@ -72,6 +75,7 @@ Install homegrown.nvim using your preferred package manager (e.g. [lazy.nvim](ht
         terminal = true,     -- Enable Snacks-based terminal commands (needs snacks.nvim)
         tmux = true,         -- Enable seamless vim/tmux navigation
         dir = true,          -- Enable RootDir, RangerPicker, and background Git commands
+        tiling = true,       -- Enable dynamic i3/sway-style autotiling split manager
     }
 }
 ```
@@ -147,6 +151,12 @@ require("homegrown.runner").setup()
 - `:RootDir` - Change local directory to the project/Git root
 - `:RangerPicker` - Floating Ranger file picker window (requires `ranger` and `snacks.nvim`)
 - `:Git <args>` - Run background git command and notify output
+
+### 11. Dynamic Autotiling (`tiling`)
+
+Splits the current window dynamically in the optimal direction based on its aspect ratio.
+- `:AutoTile <file>` - Split current window dynamically and open `<file>` (vertical split if the window is wide, horizontal split if it is tall)
+- `:AutoTile` - Split the current buffer dynamically in the optimal direction (vertical if wide, horizontal if tall)
 
 ## 🏗️ What's Next
 

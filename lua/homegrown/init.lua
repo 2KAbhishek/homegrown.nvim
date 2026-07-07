@@ -11,6 +11,7 @@ M.defaults = {
     runner = false,
     terminal = false,
     tmux = false,
+    tiling = false,
 }
 
 function M.setup(opts)
@@ -55,6 +56,10 @@ function M.setup(opts)
     if opts.tmux then
         local config = type(opts.tmux) == 'table' and opts.tmux or {}
         require('homegrown.tmux').setup(config)
+    end
+    if opts.tiling then
+        local config = type(opts.tiling) == 'table' and opts.tiling or {}
+        require('homegrown.tiling').setup(config)
     end
 end
 
