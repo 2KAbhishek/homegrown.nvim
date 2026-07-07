@@ -20,13 +20,7 @@
 <a href="https://github.com/2KAbhishek/homegrown.nvim/pulse">
 <img alt="Last Updated" src="https://img.shields.io/github/last-commit/2kabhishek/homegrown.nvim?style=flat&color=e06c75&label="> </a>
 
-<h3>Modular, plug-and-play custom Neovim configurations and plugins 🎇🎉</h3>
-
-<figure>
-  <img src="docs/images/screenshot.png" alt="homegrown.nvim in action">
-  <br/>
-  <figcaption>homegrown.nvim in action</figcaption>
-</figure>
+<h3>Homegrown plugins for nvim2k 🏡🧩</h3>
 
 </div>
 
@@ -46,8 +40,6 @@ homegrown.nvim is a collection of modular Neovim plugins and utility commands ex
 - **Navigation, Ranger, and Git commands (`dir`)**: Project RootDir directory swapper, Ranger Picker floating window, and shell-based background Git helper. _(Lightweight replacement for heavy file managers/trees)_
 - **Dynamic Autotiling (`tiling`)**: Dynamically split windows horizontally or vertically depending on the focused window aspect ratio when opening a file. _(Lightweight replacement for complex layout managers)_
 
-
-
 ## ⚡ Setup
 
 ### ⚙️ Requirements
@@ -65,7 +57,7 @@ Install homegrown.nvim using your preferred package manager (e.g. [lazy.nvim](ht
 {
     "2KAbhishek/homegrown.nvim",
     opts = {
-        bracket_nav = true,  -- Enable bracket navigation mappings
+        -- Pass a boolean to enable a module with default options
         highlighter = true,  -- Enable ColorHighlighterToggle command
         copy = true,         -- Enable clipboard copy utilities (including CopyGitUrl)
         md_preview = true,   -- Enable MDPreview command
@@ -75,7 +67,16 @@ Install homegrown.nvim using your preferred package manager (e.g. [lazy.nvim](ht
         terminal = true,     -- Enable Snacks-based terminal commands (needs snacks.nvim)
         tmux = true,         -- Enable seamless vim/tmux navigation
         dir = true,          -- Enable RootDir, RangerPicker, and background Git commands
-        tiling = true,       -- Enable dynamic i3/sway-style autotiling split manager
+
+        -- Or pass a table to customize specific configuration options
+        bracket_nav = {
+            enabled = true,
+            blank_lines = false, -- Disable [Space / ]Space mappings
+        },
+        tiling = {
+            enabled = true,
+            split_ratio = 1.8,   -- Override default split ratio of 2.0
+        },
     }
 }
 ```
@@ -155,6 +156,7 @@ require("homegrown.runner").setup()
 ### 11. Dynamic Autotiling (`tiling`)
 
 Splits the current window dynamically in the optimal direction based on its aspect ratio.
+
 - `:AutoTile <file>` - Split current window dynamically and open `<file>` (vertical split if the window is wide, horizontal split if it is tall)
 - `:AutoTile` - Split the current buffer dynamically in the optimal direction (vertical if wide, horizontal if tall)
 
