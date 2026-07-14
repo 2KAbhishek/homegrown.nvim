@@ -45,9 +45,9 @@ describe('homegrown plugin toolkit suite', function()
             highlighter = true,
             runner = {
                 interpreters = {
-                    rust = 'cargo run'
-                }
-            }
+                    rust = 'cargo run',
+                },
+            },
         })
         assert.is_true(config.options.highlighter.enabled)
         assert.equals('cargo run', config.options.runner.interpreters.rust)
@@ -81,7 +81,7 @@ describe('homegrown plugin toolkit suite', function()
                 enabled = true,
                 blank_lines = true,
                 git_conflicts = true,
-            }
+            },
         })
         assert.is_true(has_keymap('n', '[d') or true) -- check that it sets bracket maps
     end)
