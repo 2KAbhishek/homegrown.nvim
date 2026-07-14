@@ -1,0 +1,228 @@
+*homegrown.txt*
+                              For Neovim >= 0.9.0    Last change: 2026 July 14
+
+==============================================================================
+Table of Contents                                *homegrown-table-of-contents*
+
+  - Features                                              |homegrown-features|
+  - Setup                                                    |homegrown-setup|
+  - Usage                                                    |homegrown-usage|
+  - What’s Next                                    |homegrown-what’s-next|
+  - ‍ Behind The Code                        |homegrown-‍-behind-the-code|
+
+homegrown.nvimis a collection of modular Neovim plugins and utility commands
+extracted from nvim2k <https://github.com/2kabhishek/nvim2k> that replaces
+desired functionalities from well known plugins.
+
+
+FEATURES                                                  *homegrown-features*
+
+- **Bracket Navigation (bracket_nav)**: Quick native mappings (`[d`, `]b`, `[x`, etc.) for diagnostics, quickfix, buffers, windows, conflict markers, and blank lines. _(Replaces mini.bracketed)_
+- **Color Highlighter (highlighter)**: A lightweight, automatic text highlighter for Hex/RGB/RGBA/HSL/HSLA color codes. _(Replaces ccc.nvim)_
+- **Clipboard Utilities (copy)**: Clean commands for copying relative/absolute paths, line numbers, file names, and GitHub/GitLab repository URLs. _(Replaces gitlinker.nvim)_
+- **Markdown Preview (md_preview)**: browser-based live-sync preview for markdown buffers without heavy dependencies. _(Replaces markdown-preview.nvim)_
+- **Smart Autopairs (pairs)**: Zero-dependency automatic completion and deletion for brackets, quotes, and HTML tags. _(Replaces mini.pairs + nvim-ts-autotag)_
+- **Search & Replace (replace)**: Project-wide search and replace via ripgrep and the quickfix list. _(Replaces nvim-spectre)_
+- **Asynchronous Runner (runner)**: Quick runner that executes visual selections or complete buffers in python, ruby, node, typescript, go, etc. _(Replaces sniprun)_
+- **Terminal Layouts (terminal)**: Shortcuts to toggle split, floating, and tabbed terminal buffers powered by `snacks.nvim`. _(Replaces termim)_
+- **Vim/Tmux split integration (tmux)**: Seamless navigation across split editor panes and Tmux windows. _(Replaces navigator.nvim)_
+- **Navigation, Ranger, and Git commands (dir)**: Project RootDir directory swapper, Ranger Picker floating window, and shell-based background Git helper. _(Lightweight replacement for heavy file managers/trees)_
+- **Dynamic Autotiling (tiling)**: Dynamically split windows horizontally or vertically depending on the focused window aspect ratio when opening a file. _(Lightweight replacement for complex layout managers)_
+
+
+SETUP                                                        *homegrown-setup*
+
+
+REQUIREMENTS ~
+
+- Neovim >= 0.9.0
+- snacks.nvim <https://github.com/folke/snacks.nvim> (optional, for `terminal` and `dir` modules)
+- ripgrep <https://github.com/BurntSushi/ripgrep> (for `replace` module)
+- ranger <https://github.com/ranger/ranger> (optional, for `:RangerPicker` in `dir` module)
+
+
+INSTALLATION ~
+
+Install homegrown.nvim using your preferred package manager (e.g. lazy.nvim
+<https://github.com/folke/lazy.nvim>) and configure it with your desired
+options:
+
+>lua
+    {
+        "2KAbhishek/homegrown.nvim",
+        opts = {
+            -- Pass a boolean to enable a module with default options
+            highlighter = true,  -- Enable ColorHighlighterToggle command
+            copy = true,         -- Enable clipboard copy utilities (including CopyGitUrl)
+            md_preview = true,   -- Enable MDPreview command
+            pairs = true,        -- Enable zero-dependency autopairs
+            replace = true,      -- Enable project search & replace
+            runner = true,       -- Enable async code runner command
+            terminal = true,     -- Enable Snacks-based terminal commands (needs snacks.nvim)
+            tmux = true,         -- Enable seamless vim/tmux navigation
+            dir = true,          -- Enable RootDir, RangerPicker, and background Git commands
+    
+            -- Or pass a table to customize specific configuration options
+            bracket_nav = {
+                enabled = true,
+                blank_lines = false, -- Disable [Space / ]Space mappings
+            },
+            tiling = {
+                enabled = true,
+                split_ratio = 1.8,   -- Override default split ratio of 2.0
+            },
+            runner = {
+                enabled = true,
+                interpreters = {
+                    rust = "cargo run", -- Add support for Rust code execution
+                }
+            },
+            pairs = {
+                enabled = true,
+                tag_filetypes = {
+                    xml = true, -- Enable tag-closing in XML files
+                }
+            }
+        }
+    }
+<
+
+Or install it and load individual modules manually:
+
+>lua
+    -- Initialize only the autopairs
+    require("homegrown.pairs").setup()
+    
+    -- Initialize only the code runner
+    require("homegrown.runner").setup()
+<
+
+
+USAGE                                                        *homegrown-usage*
+
+
+1. BRACKET NAVIGATION (BRACKET_NAV) ~
+
+- `[d` / `]d` : Previous/Next Diagnostic
+- `[q` / `]q` : Previous/Next Quickfix
+- `[Q` / `]Q` : First/Last Quickfix item
+- `[b` / `]b` : Previous/Next Buffer
+- `[B` / `]B` : First/Last Buffer
+- `[w` / `]w` : Previous/Next Window
+- `[j` / `]j` : Previous/Next Jump (changelist)
+- `[x` / `]x` : Previous/Next Git conflict marker (`<<<<<<<`, `=======`, `>>>>>>>`)
+- `[<space>` / `]<space>` : Insert blank line above/below without moving the cursor
+
+
+2. COLOR HIGHLIGHTER (HIGHLIGHTER) ~
+
+- Run `:ColorHighlighterToggle` to enable/disable.
+- Automatically adjusts text foreground color for contrast. Skips large buffers.
+
+
+3. CLIPBOARD COPY UTILITIES (COPY) ~
+
+- `:CopyGitUrl` - Copy lines/file GitHub URL to clipboard (supports visual line ranges)
+- `:CopyRelativePath` / `:CopyAbsolutePath` - Copy file path to clipboard
+- `:CopyRelativePathWithLine` / `:CopyAbsolutePathWithLine` - Copy file path with current line number
+- `:CopyFileName` - Copy current file name to clipboard
+
+
+4. MARKDOWN PREVIEW (MD_PREVIEW) ~
+
+- Run `:MDPreview` to generate a temp HTML file and launch the preview.
+
+
+5. AUTOPAIRS (PAIRS) ~
+
+- Automatically closes brackets `()`, `[]`, `{}` and quotes `""`, `''`, ``.
+- Automatically closes HTML/XML tags in supported filetypes (`html`, `vue`, `svelte`, `react`, etc.).
+- Smart backspace: deleting an open bracket deletes its closing pair if empty.
+
+
+6. SEARCH & REPLACE (REPLACE) ~
+
+- Run `:Replace` or `:Replace <pattern>`.
+
+
+7. CODE RUNNER (RUNNER) ~
+
+- Run `:Runner` to execute visual selection or buffer.
+- Supports Python, Ruby, Lua, Node (JavaScript), ts-node (TypeScript), Go, Bash, Elixir, and Java.
+
+
+8. TERMINAL WRAPPERS (TERMINAL) ~
+
+- `:Fterm` : Floating terminal
+- `:Sterm` : Split terminal (bottom)
+- `:Vterm` : Vertical split terminal (right)
+- `:Tterm` : Terminal in current buffer
+
+
+9. TMUX SPLIT NAVIGATION (TMUX) ~
+
+- Navigate splits/panes using `<C-h>`, `<C-j>`, `<C-k>`, `<C-l>`.
+
+
+10. NAVIGATION, RANGER, AND GIT COMMANDS (DIR) ~
+
+- `:RootDir` - Change local directory to the project/Git root
+- `:RangerPicker` - Floating Ranger file picker window (requires `ranger` and `snacks.nvim`)
+- `:Git <args>` - Run background git command and notify output
+
+
+11. DYNAMIC AUTOTILING (TILING) ~
+
+Splits the current window dynamically in the optimal direction based on its
+aspect ratio.
+
+- `:AutoTile <file>` - Split current window dynamically and open `<file>` (vertical split if the window is wide, horizontal split if it is tall)
+- `:AutoTile` - Split the current buffer dynamically in the optimal direction (vertical if wide, horizontal if tall)
+
+
+WHAT’S NEXT                                        *homegrown-what’s-next*
+
+Planning to add more helper plugins, cleaner diagnostics/LSP integration, and
+modular customization options.
+
+
+TO-DO ~
+
+- Extract custom components from `nvim2k`
+- Build pick-and-choose modular loader
+- Add more configuration parameters to individual modules
+
+
+‍ BEHIND THE CODE                            *homegrown-‍-behind-the-code*
+
+
+INSPIRATION ~
+
+homegrown.nvim was inspired by the need to share private configurations,
+utilities, and helper commands with others without forcing them to adopt an
+entire pre-configured editor setup.
+
+
+CHALLENGES/LEARNINGS ~
+
+- Refactoring monolithic keymaps and auto-commands to be fully encapsulated within standard plugin module boundaries.
+- Decoupling user configurations from shared utilities to keep dependencies minimal.
+
+
+TOOLING ~
+
+- dots2k <https://github.com/2kabhishek/dots2k> — Dev Environment
+- nvim2k <https://github.com/2kabhishek/nvim2k> — Personalized Editor
+- sway2k <https://github.com/2kabhishek/sway2k> — Desktop Environment
+- qute2k <https://github.com/2kabhishek/qute2k> — Personalized Browser
+
+
+MORE INFO ~
+
+- shelly <https://github.com/2kabhishek/shelly> — Command line template
+- tiny-web <https://github.com/2kabhishek/tiny-web> — Web app template
+
+
+Generated by panvimdoc <https://github.com/kdheepak/panvimdoc>
+
+vim:tw=78:ts=8:noet:ft=help:norl:
