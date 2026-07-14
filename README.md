@@ -20,7 +20,7 @@
 <a href="https://github.com/2KAbhishek/homegrown.nvim/pulse">
 <img alt="Last Updated" src="https://img.shields.io/github/last-commit/2kabhishek/homegrown.nvim?style=flat&color=e06c75&label="> </a>
 
-<h3>Homegrown plugins for nvim2k 🏡🧩</h3>
+<h3>Simple utility plugins for nvim 🏡🧩</h3>
 
 </div>
 
