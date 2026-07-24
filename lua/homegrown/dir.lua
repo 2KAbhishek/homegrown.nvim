@@ -2,13 +2,13 @@ local M = {}
 
 local function get_root_dir()
     local bufname = vim.fn.expand('%:p')
-    if vim.fn.filereadable(bufname) == 0 then
+    if bufname == '' then
         return ''
     end
 
     local parent = vim.fn.fnamemodify(bufname, ':h')
-    local git_root = vim.fn.systemlist('git -C ' .. parent .. ' rev-parse --show-toplevel')
-    if #git_root > 0 and git_root[1] ~= '' then
+    local git_root = vim.fn.systemlist('git -C ' .. vim.fn.shellescape(parent) .. ' rev-parse --show-toplevel')
+    if vim.v.shell_error == 0 and #git_root > 0 and git_root[1] ~= '' then
         return git_root[1]
     else
         return parent
@@ -22,7 +22,7 @@ function M.setup()
         if root == '' then
             return
         end
-        vim.cmd('lcd ' .. root)
+        vim.cmd('lcd ' .. vim.fn.fnameescape(root))
     end, {})
 
     -- Runs generic git commands in the background and prints output

@@ -100,6 +100,26 @@ describe('homegrown plugin toolkit suite', function()
         assert.is_true(command_exists('RootDir'))
         assert.is_true(command_exists('Git'))
         assert.is_true(command_exists('RangerPicker'))
+
+        -- Test RootDir execution in a non-git temporary directory
+        local orig_dir = vim.fn.getcwd()
+        local tmp_dir = vim.fn.tempname()
+        vim.fn.mkdir(tmp_dir, 'p')
+        local tmp_file = tmp_dir .. '/test.txt'
+        local f = io.open(tmp_file, 'w')
+        if f then
+            f:write('test')
+            f:close()
+        end
+
+        vim.cmd('edit ' .. vim.fn.fnameescape(tmp_file))
+        vim.cmd('RootDir')
+        assert.equals(vim.fn.fnamemodify(tmp_dir, ':p'):gsub('/$', ''), vim.fn.getcwd():gsub('/$', ''))
+
+        vim.cmd('bdelete!')
+        vim.fn.delete(tmp_file)
+        vim.fn.delete(tmp_dir, 'd')
+        vim.cmd('cd ' .. vim.fn.fnameescape(orig_dir))
     end)
 
     it('6. highlighter - registers toggling command', function()
