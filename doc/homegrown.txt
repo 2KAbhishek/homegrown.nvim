@@ -1,5 +1,5 @@
 *homegrown.txt*
-                              For Neovim >= 0.9.0    Last change: 2026 July 24
+                            For Neovim >= 0.9.0    Last change: 2026 August 09
 
 ==============================================================================
 Table of Contents                                *homegrown-table-of-contents*
