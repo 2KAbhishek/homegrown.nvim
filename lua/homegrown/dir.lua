@@ -59,6 +59,16 @@ function M.setup()
             end,
         })
     end, {})
+
+    -- Select filetype for current buffer
+    vim.api.nvim_create_user_command('SelectFileType', function()
+        local fts = vim.fn.getcompletion('', 'filetype')
+        vim.ui.select(fts, { prompt = 'Select Filetype: ' }, function(choice)
+            if choice and choice ~= '' then
+                vim.bo.filetype = choice
+            end
+        end)
+    end, {})
 end
 
 return M
